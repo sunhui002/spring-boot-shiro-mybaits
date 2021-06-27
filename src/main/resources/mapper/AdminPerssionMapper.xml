@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.wj.dao.AdminPermissionDao">
+    <resultMap type="com.example.wj.pojo.AdminPermission" id="AdminPermissionmap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="decs_" property="desc"/>
+        <result column="url" property="url"/>
+    </resultMap>
+    <select id="findAllById" parameterType="java.util.List" resultMap="AdminPermissionmap">
+        select id, name, desc_, url from admin_permission
+         where id in
+        <foreach collection="list" item="id" open="(" close=")" separator="," >
+             #{id}
+        </foreach>
+
+    </select>
+
+    <select id="findAll"  resultMap="AdminPermissionmap">
+        select id, name, desc_, url from admin_permission
+    </select>
+
+</mapper>

@@ -1,0 +1,81 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.wj.dao.BookDao">
+
+    <resultMap type="com.example.wj.pojo.Book" id="bookmap">
+        <id column="id" property="id"/>
+        <result column="cover" property="cover"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="date" property="date"/>
+        <result column="press" property="press"/>
+        <result column="abs" property="abs"/>
+        <association property="category" javaType="com.example.wj.pojo.Category">
+            <id column="catid" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+    <select id="findAll"  resultMap="bookmap">
+        select book.id, book.cover, book.title,book.author,book.date,book.press,book.abs,category.id,category.name  from book,category
+        where book.cid = category.id
+    </select>
+
+    <select id="findAllByCategory" parameterType="com.example.wj.pojo.Category" resultMap="bookmap" >
+        select book.id, book.cover, book.title,book.author,book.date,book.press,book.abs,category.id,category.name  from book,category
+        where book.cid = #{id} and category.id = #{id}
+    </select>
+
+    <insert id="save"  parameterType="com.example.wj.pojo.Book" >
+        INSERT INTO book(title,cover, author, date, press, abs, cid) VALUES(#{title}, #{cover}, #{author}, #{date}, #{press}, #{abs}, #{category.catid})
+        ON DUPLICATE KEY UPDATE title=#{title},cover= #{cover},author= #{author},date= #{date},press= #{press},abs= #{abs},cid= #{category.catid};
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from book
+        where id=#{id}
+    </delete>
+</mapper>
+   <!-- title=#{title},cover= #{cover},author= #{author},date= #{date},press= #{press},abs= #{abs},cid= #{category.catid}; -->
+   <!-- <insert id="save"  parameterType="com.example.wj.pojo.Book" >
+        <selectKey keyProperty="id" resultType="com.example.wj.pojo.Book" order="AFTER">
+            select id from book
+            where title = #{title}
+        </selectKey>
+        <if test="id != null" >
+            update book
+            <set>
+                <if test="title!= null" >
+                    title= #{title},
+                </if>
+                <if test="cover!= null" >
+                    cover= #{cover},
+                </if>
+                <if test="author!= null" >
+                    author= #{author},
+                </if>
+                <if test="date!= null" >
+                    date= #{date},
+                </if>
+                <if test="press!= null" >
+                    press= #{press},
+                </if>
+                <if test="abs!= null" >
+                    abs= #{abs},
+                </if>
+                <if test="category!= null" >
+                    cid= #{category.catid}
+
+                </if>
+            </set>
+            <where>
+                title= #{title}
+            </where>
+        </if>
+        <if test="id == null">
+            insert into book(id,cover,title,author,date,press,abs,cid) values (#{id},#{cover},#{title},#{author},#{date},#{press},#{abs},#{category.catid})
+        </if>
+    </insert>
+-->
+

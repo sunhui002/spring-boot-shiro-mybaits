@@ -1,0 +1,18 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.wj.dao.AdminRoleDao">
+    <resultMap type="com.example.wj.pojo.AdminRole" id="rolemap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="name_zh" property="nameZh"/>
+        <result column="enabled" property="enabled"/>
+       </resultMap>
+
+
+
+    <select id="findAll"  resultMap="rolemap">
+        select id, name,name_zh, enabled enabled from admin_role
+    </select>
+</mapper>
